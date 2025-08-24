@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Untuk Materi</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #ffffff;
+            font-family: "Rajdhani", 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .card {
+            width: 100%;
+            max-width: 320px;
+            min-height: 440px;
+            perspective: 1000px;
+            cursor: pointer;
+            
+        }
+        
+        .card-inner {
+            width: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+            
+        }
+        
+        .card.open .card-inner {
+            transform: rotateY(-180deg);
+        }
+        
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            min-height: 440px;
+        }
+        
+        .card-front {
+            background: #7B6CD9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
+            border-radius: 10px;
+            flex-direction: column;
+            background-image: url(../pattern.svg);
+            background-size: 75%;
+        }
+        
+        .card-front h1 {
+            font-family: "Rajdhani";
+            font-size: clamp(1.8rem, 4vw, 2rem);
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
+            margin: 0;
+            width: 80%;
+            color: #FFF;
+            text-align: center;
+            -webkit-text-stroke-width: 0.5px;
+            -webkit-text-stroke-color: #000000;
+            font-family: Rajdhani;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            
+        }
+
+        .header img {
+            width: 30%;
+            border-radius: 10px;
+        }
+
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+        
+        .card-back {
+            background: #7B6CD9;
+            transform: rotateY(180deg);
+            padding: 15px;
+            box-sizing: border-box;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: url(../pattern.svg);
+            background-size: 75%;
+        }
+
+        /* photo stack */
+        .photos {
+            position: relative;
+            width: 100%;
+            max-width: 240px;
+            height: 200px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .photo {
+            position: absolute;
+            height: 75%;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.6s ease;
+            cursor: pointer;
+        }
+        
+        /* posisi tumpukan */
+        .photo:nth-child(1) {
+            transform: rotate(-8deg);
+            z-index: 1;
+        }
+        
+        .photo:nth-child(2) {
+            transform: rotate(4deg);
+            z-index: 2;
+        }
+        
+        .photo:nth-child(3) {
+            transform: rotate(0deg);
+            z-index: 3;
+        }
+        
+        /* foto aktif muncul di atas */
+        .photo.active {
+            z-index: 10;
+            transform: rotate(0deg) scale(1.05);
+        }
+        
+        .message {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            font-weight: bold;
+            color: #444;
+            margin: 10px 0 5px 0;
+        }
+        
+        .card-back p {
+            font-size: clamp(0.6rem, 2.5vw, 0.8rem);
+            line-height: 1.4;
+            margin: 10px 0;
+            color: #ffffff;
+            width: 80%;
+        }
+        
+        .play-btn {
+            padding: 8px 15px;
+            border: none;
+            background: #44D2F2;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: auto;
+            margin-bottom: 5%;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            min-height: 36px;
+        }
+        
+        .play-btn:hover {
+            background: #3dbedb;
+        }
+        
+        .play-btn a {
+                color: #ffffff;
+                text-decoration: none;
+            }
+
+        /* Tablet */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .card {
+                max-width: 300px;
+            }
+            
+            .photos {
+                height: 180px;
+                max-width: 220px;
+            }
+            
+            .card-front,
+            .card-back {
+                min-height: 400px;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .card {
+                max-width: 280px;
+            }
+            
+            
+            .card-back {
+                padding: 12px;
+            }
+            
+            .photos {
+                height: 160px;
+                max-width: 200px;
+                margin: 8px 0;
+            }
+            
+            .card-front,
+            .card-back {
+                min-height: 380px;
+            }
+            
+            .message {
+                margin: 8px 0 5px 0;
+            }
+            
+            .card-back p {
+                margin: 8px 0;
+            }
+            
+            .play-btn {
+                padding: 6px 12px;
+                margin-top: auto;
+            }
+            
+        }
+
+        /* Very small mobile */
+        @media (max-width: 320px) {
+            .card {
+                max-width: 260px;
+            }
+            
+            .photos {
+                height: 140px;
+                max-width: 180px;
+            }
+            
+            .card-front,
+            .card-back {
+                min-height: 360px;
+            }
+        }
+
+        /* Landscape mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            body {
+                align-items: flex-start;
+                padding: 10px;
+            }
+            
+            .card {
+                margin: 10px 0;
+            }
+            
+            .photos {
+                height: 120px;
+            }
+            
+            .card-front,
+            .card-back {
+                min-height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <audio id="myAudio" src="../lagu.mp3" autoplay loop></audio>
+    <div class="card" onclick="this.classList.toggle('open')" >
+        
+        <div class="card-inner" >
+            <div class="card-front" onclick="playAudio()">
+                <div class="header">
+                    <img src="../decoration0.svg" alt="">
+                    <img src="../decoration.svg" alt="">
+                </div>
+                <h1>UNTUK MATERI</h1>
+                <img src="../gadani.png" alt="" width="41%">
+                <div class="footer">
+                    <img src="../decorationbottom.svg" alt="" >
+                </div>  
+            </div>
+            <div class="card-back">
+                <div class="photos" id="photo-stack">
+                    <img src="../zfoto/1.jpg" alt="Photo 1" class="photo active">
+                    <img src="../zfoto/2.jpg" alt="Photo 2" class="photo">
+                    <img src="../zfoto/3.jpg" alt="Photo 3" class="photo">
+                    <img src="../zfoto/4.jpg" alt="Photo 4" class="photo">
+                    <img src="../zfoto/5.jpg" alt="Photo 5" class="photo">
+                    <img src="../zfoto/6.jpg" alt="Photo 6" class="photo">
+                    <img src="../zfoto/7.jpg" alt="Photo 7" class="photo">
+                    <img src="../zfoto/8.jpg" alt="Photo 8" class="photo">
+                    <img src="../zfoto/9.jpg" alt="Photo 8" class="photo">
+                </div>
+                <p style="font-family: Mulish">
+                    Aku cuma mau ngucapin terima kasih, maaf belum bisa ngasih yang terbaik buat materi... dibaca yak surat ga jelasku ini, semoga aja ga cringe
+                    <br><br>
+                    Tapi jawab 5 kuis dulu yaw... :p
+                </p>
+                <a href="soal1.html" style="margin-top: auto;"><button class="play-btn">Buka Surat</button></a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+        const audio = document.getElementById('myAudio');
+
+        function playAudio() {
+            audio.currentTime = 20;
+            audio.play();
+        }
+
+
+        // ganti foto aktif saat diklik
+        const photos = document.querySelectorAll(".photo");
+        let current = 0;
+
+        // Klik manual
+        photos.forEach((photo, index) => {
+            photo.addEventListener("click", (e) => {
+                e.stopPropagation();
+                photos[current].classList.remove("active");
+                current = (current + 1) % photos.length;
+                photos[current].classList.add("active");
+            });
+        });
+
+        // Otomatis setiap 3 detik
+        setInterval(() => {
+            photos[current].classList.remove("active");
+            current = (current + 1) % photos.length;
+            photos[current].classList.add("active");
+        }, 3000);
+
+
+        // Handle orientation change
+        window.addEventListener('orientationchange', function() {
+            setTimeout(function() {
+                window.scrollTo(0, 0);
+            }, 500);
+        });
+
+        
+    </script>
+</body>
+
+</html>

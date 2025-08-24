@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #ffffff;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .card {
+            width: 100%;
+            max-width: 320px;
+            min-height: 440px;
+            perspective: 1000px;     
+        }
+        
+        .card-inner {
+            width: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+        }
+        
+        .card.open .card-inner {
+            transform: rotateY(-180deg);
+        }
+        
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            min-height: 440px;
+        }
+        
+        .card-front {
+            background: #7B6CD9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
+            border-radius: 10px;
+            flex-direction: column;
+            background-image: url(../pattern.svg);
+            background-size: 75%;
+            gap: 10px;
+        }
+        
+        .card-front h1 {
+            font-family: Poppins;
+            font-size: clamp(1.8rem, 4vw, 2rem);
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
+            line-height: 1.4;
+            margin: 0;
+            width: 80%;
+            
+        }
+
+        .header img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .header {
+            width: 100%;
+        }
+
+        .footer img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+        
+        .card-back {
+            background: #7B6CD9;
+            transform: rotateY(180deg);
+            padding: 15px;
+            box-sizing: border-box;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: url(../pattern.svg);
+            background-size: 75%;
+        }
+
+        /* photo stack */
+        .photos {
+            position: relative;
+            width: 100%;
+            max-width: 240px;
+            height: 200px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .photo {
+            position: absolute;
+            height: 75%;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.6s ease;
+        }
+
+        
+
+        input, select, textarea, button {
+            all: unset;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        input {
+            border-radius: 10px;
+            background-color: #ffffff;
+            padding: 5px;
+            color: #000000;
+        }
+
+        
+        /* posisi tumpukan */
+        .photo:nth-child(1) {
+            transform: rotate(-8deg);
+            z-index: 1;
+        }
+        
+        .photo:nth-child(2) {
+            transform: rotate(4deg);
+            z-index: 2;
+        }
+        
+        .photo:nth-child(3) {
+            transform: rotate(0deg);
+            z-index: 3;
+        }
+        
+        /* foto aktif muncul di atas */
+        .photo.active {
+            z-index: 10;
+            transform: rotate(0deg) scale(1.05);
+        }
+        
+        .message {
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+            font-weight: bold;
+            color: #444;
+            margin: 10px 0 5px 0;
+        }
+        
+        .card-back p {
+            font-size: clamp(0.6rem, 2.5vw, 0.8rem);
+            line-height: 1.4;
+            margin: 10px 0;
+            color: #ffffff;
+            width: 80%;
+        }
+        
+        .play-btn {
+            padding: 8px 15px;
+            border: none;
+            background: #44D2F2;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-bottom: 5%;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            min-height: 36px;
+        }
+        
+        .play-btn:hover {
+            background: #3dbedb;
+        }
+        
+        .play-btn a {
+                color: #ffffff;
+                text-decoration: none;
+            }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+        }
+        /* Tablet */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .card {
+                max-width: 300px;
+            }
+            
+            .photos {
+                height: 180px;
+                max-width: 220px;
+            }
+            
+            .card-front,
+            .card-back {
+                min-height: 400px;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .card {
+                max-width: 280px;
+            }
+            
+            
+            .card-back {
+                padding: 12px;
+            }
+            
+            .photos {
+                height: 160px;
+                max-width: 200px;
+                margin: 8px 0;
+            }
+            
+            .card-front,
+            .card-back {
+                min-height: 380px;
+            }
+            
+            .message {
+                margin: 8px 0 5px 0;
+            }
+            
+            .card-back p {
+                margin: 8px 0;
+            }
+            
+            .play-btn {
+                padding: 6px 12px;
+            }
+            
+        }
+
+        /* Very small mobile */
+        @media (max-width: 320px) {
+            .card {
+                max-width: 260px;
+            }
+            
+            .photos {
+                height: 140px;
+                max-width: 180px;
+            }
+            
+            .card-front,
+            .card-back {
+                min-height: 360px;
+            }
+        }
+
+        /* Landscape mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            body {
+                align-items: flex-start;
+                padding: 10px;
+            }
+            
+            .card {
+                margin: 10px 0;
+            }
+            
+            .photos {
+                height: 120px;
+            }
+            
+            .card-front,
+            .card-back {
+                min-height: 300px;
+            }
+        }
+        a {
+                color: #ffffff;
+                text-decoration: none;
+        }
+    </style>
+    <script>
+        function validateForm() {
+        const username = document.getElementById("username").value;
+
+        // Validasi sederhana: pastikan kedua field tidak kosong
+        if (username === "Nadin") {
+            window.location.href = "soal2.html"; // Ganti dengan nama file HTML tujuan
+            alert("Bener");
+            return false;
+        } else {
+            alert("Salah lek")
+        }
+
+        // Jika validasi berhasil, arahkan ke halaman lain
+        return true;
+        }
+    </script>
+</head>
+<body>
+    <div class="card">
+        <div class="card-inner">
+            
+            <div class="card-front">
+                <div class="header">
+                    <img src="../top.svg" alt="">
+                </div>
+                <h1>Makasih materi💌</h1>
+                <a href="tessurat.pdf" download class="play-btn">Download Surat</a>
+                <div class="footer">
+                    <img src="../bottom.svg" alt="" >
+                </div>  
+            </div>
+        </div>
+    </div>
+</body>
+    
+</html>
